@@ -6,8 +6,9 @@ require('dotenv').config({ path: __dirname + '/.env' });
 const jwt = require('jsonwebtoken');
 const depthLimit = require('graphql-depth-limit');
 const { createComplexityLimitRule } = require('graphql-validation-complexity');
+const mongoose = require('mongoose');
 
-const db = require('./db');
+// const db = require('./db');
 const models = require('./models');
 const typeDefs = require('./schema');
 const resolvers = require('./resolvers');
@@ -30,7 +31,14 @@ const app = express();
 app.use(helmet());
 app.use(cors());
 
-db.connect(DB_HOST);
+mongoose.connect(DB_HOST, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+  // useFindAndModify: false,
+  // useCreateIndex: true
+});
+
+// db.connect(DB_HOST);
 //Настроюэмо ApolloServer
 const server = new ApolloServer({
   typeDefs,
